@@ -1,13 +1,20 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
+class FirstScreen: UIViewController {
+    let segmentedControl = UISegmentedControl()
+        
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        setupSegmentedControlSettings()
     }
-
-
+    
+    internal func setupSegmentedControlSettings() {
+        //segmentedControl.numberOfSegments = 2
+        segmentedControl.backgroundColor = .lightGray
+        //segmentedControl.addTarget(self, action: <#T##Selector#>, for: .valueChanged)
+    }
+    
 }
 
