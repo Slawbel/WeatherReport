@@ -1,9 +1,3 @@
-//
-//  ViewController.swift
-//  WeatherReport
-//
-//  Created by Viacheslav Belov on 17.07.2024.
-//
 
 import UIKit
 
