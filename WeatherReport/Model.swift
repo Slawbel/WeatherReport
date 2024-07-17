@@ -1,6 +1,6 @@
 import UIKit
 
-struct weatherAttributes {
+struct WeatherAttributes {
     let name: String
     let image: UIImage
     let animation: String
