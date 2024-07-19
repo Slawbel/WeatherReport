@@ -13,6 +13,7 @@
 		A26392ED2C47F35F006ADF9C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A26392EC2C47F35F006ADF9C /* Assets.xcassets */; };
 		A26392F02C47F35F006ADF9C /* Base in Resources */ = {isa = PBXBuildFile; fileRef = A26392EF2C47F35F006ADF9C /* Base */; };
 		A26392F82C4869EA006ADF9C /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26392F72C4869EA006ADF9C /* Model.swift */; };
+		A26392FA2C49E9A2006ADF9C /* CellFirstScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26392F92C49E9A2006ADF9C /* CellFirstScreen.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		A26392EF2C47F35F006ADF9C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A26392F12C47F35F006ADF9C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A26392F72C4869EA006ADF9C /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		A26392F92C49E9A2006ADF9C /* CellFirstScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellFirstScreen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				A26392EE2C47F35F006ADF9C /* LaunchScreen.storyboard */,
 				A26392F12C47F35F006ADF9C /* Info.plist */,
 				A26392F72C4869EA006ADF9C /* Model.swift */,
+				A26392F92C49E9A2006ADF9C /* CellFirstScreen.swift */,
 			);
 			path = WeatherReport;
 			sourceTree = "<group>";
@@ -139,6 +142,7 @@
 			files = (
 				A26392E82C47F35D006ADF9C /* FirstScreen.swift in Sources */,
 				A26392E42C47F35D006ADF9C /* AppDelegate.swift in Sources */,
+				A26392FA2C49E9A2006ADF9C /* CellFirstScreen.swift in Sources */,
 				A26392E62C47F35D006ADF9C /* SceneDelegate.swift in Sources */,
 				A26392F82C4869EA006ADF9C /* Model.swift in Sources */,
 			);
@@ -290,7 +294,6 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -319,7 +322,6 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
