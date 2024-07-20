@@ -26,8 +26,6 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         view.backgroundColor = .white
 
         setupCollectionView()
-
-        NotificationCenter.default.addObserver(self, selector: #selector(handleImageTapNotification(_:)), name: .imageTapped, object: nil)
     }
 
     private func setupCollectionView() {
@@ -70,7 +68,7 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            collectionView.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 0.25)
         ])
     }
 
@@ -85,19 +83,20 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
             return UICollectionViewCell()
         }
         
-        cell.imageWeather.image = weatherTypes[indexPath.item].image
+        cell.weatherButton.setImage(weatherTypes[indexPath.item].image, for: .normal)
+        cell.addActionClosure = { [weak self] in
+            self?.handleWeatherButtonTap(at: indexPath)
+        }
         return cell
     }
 
-    @objc private func handleImageTapNotification(_ notification: Notification) {
-        if let cell = notification.object as? CellFirstScreen,
-           let indexPath = collectionView.indexPath(for: cell) {
-            let animationName = weatherTypes[indexPath.item].animation
-            
-            showAnimation(for: animationName)
-        }
+    private func handleWeatherButtonTap(at indexPath: IndexPath) {
+        let animationName = weatherTypes[indexPath.item].animation
+        showAnimation(for: animationName)
     }
 
     private func showAnimation(for animationName: String) {
+        // Implement animation logic here
+        print("Showing animation: \(animationName)")
     }
 }

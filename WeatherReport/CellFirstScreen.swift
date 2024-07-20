@@ -1,16 +1,13 @@
 import UIKit
 
-extension NSNotification.Name {
-    static let imageTapped = NSNotification.Name("imageTapped")
-}
-
 class CellFirstScreen: UICollectionViewCell {
-    var imageWeather = UIImageView()
+    var weatherButton = UIButton()
+    var addActionClosure: (() -> Void)?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setupImageWeatherSettings()
-        setupTapGestureRecognizer()
     }
 
     required init?(coder: NSCoder) {
@@ -18,30 +15,26 @@ class CellFirstScreen: UICollectionViewCell {
     }
 
     private func setupImageWeatherSettings() {
-        imageWeather.clipsToBounds = true
-        imageWeather.contentMode = .scaleAspectFit
-        imageWeather.backgroundColor = .lightGray
-        contentView.addSubview(imageWeather)
+        weatherButton.clipsToBounds = true
+        weatherButton.contentMode = .scaleAspectFit
+        weatherButton.backgroundColor = .black
+        weatherButton.contentHorizontalAlignment = .center
+        weatherButton.contentVerticalAlignment = .center
+        weatherButton.addAction(UIAction { [weak self] _ in
+            self?.addActionClosure?()
+        }, for: .touchUpInside)
+        
         setupCellConstraints()
     }
 
     private func setupCellConstraints() {
-        imageWeather.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(weatherButton)
+        weatherButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            imageWeather.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            imageWeather.topAnchor.constraint(equalTo: contentView.topAnchor),
-            imageWeather.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            imageWeather.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            weatherButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            weatherButton.topAnchor.constraint(equalTo: contentView.topAnchor),
+            weatherButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            weatherButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
-    }
-    
-    private func setupTapGestureRecognizer() {
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(cellAction))
-        contentView.isUserInteractionEnabled = true
-        contentView.addGestureRecognizer(tapGestureRecognizer)
-    }
-
-    @objc func cellAction() {
-        NotificationCenter.default.post(name: .imageTapped, object: self)
     }
 }
