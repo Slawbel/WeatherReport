@@ -5,27 +5,29 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
     private var collectionView: UICollectionView!
 
     let weatherTypes: [WeatherAttributes] = [
-        WeatherAttributes(name: "Fog", image: UIImage(named: "fog") ?? UIImage(), animation: "fogAnimation"),
-        WeatherAttributes(name: "Rain", image: UIImage(named: "rain") ?? UIImage(), animation: "rainAnimation"),
-        WeatherAttributes(name: "Hail", image: UIImage(named: "hail") ?? UIImage(), animation: "hailAnimation"),
-        WeatherAttributes(name: "Snow", image: UIImage(named: "snow") ?? UIImage(), animation: "snowAnimation"),
-        WeatherAttributes(name: "Windy", image: UIImage(named: "windy") ?? UIImage(), animation: "windyAnimation"),
-        WeatherAttributes(name: "Sunny", image: UIImage(named: "sunny") ?? UIImage(), animation: "sunnyAnimation"),
-        WeatherAttributes(name: "Sleet", image: UIImage(named: "sleet") ?? UIImage(), animation: "sleetAnimation"),
-        WeatherAttributes(name: "Cloudy", image: UIImage(named: "cloudy") ?? UIImage(), animation: "cloudyAnimation"),
-        WeatherAttributes(name: "Tornado", image: UIImage(named: "tornado") ?? UIImage(), animation: "tornadoAnimation"),
-        WeatherAttributes(name: "Drizzle", image: UIImage(named: "drizzle") ?? UIImage(), animation: "drizzleAnimation"),
-        WeatherAttributes(name: "Blizzard", image: UIImage(named: "blizzard") ?? UIImage(), animation: "blizzardAnimation"),
-        WeatherAttributes(name: "Sandstorm", image: UIImage(named: "sandstorm") ?? UIImage(), animation: "sandstormAnimation"),
-        WeatherAttributes(name: "Thunderstorm", image: UIImage(named: "thunderstorm") ?? UIImage(), animation: "thunderstormAnimation"),
-        WeatherAttributes(name: "Partly Cloudy", image: UIImage(named: "partly_cloudy") ?? UIImage(), animation: "partlyCloudyAnimation")
+        WeatherAttributes(name: "Fog", image: UIImage(systemName: "cloud.fog.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal) ?? UIImage(), animation: "fogAnimation"),
+        WeatherAttributes(name: "Rain", image: UIImage(systemName: "cloud.rain.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal) ?? UIImage(), animation: "rainAnimation"),
+        WeatherAttributes(name: "Hail", image: UIImage(systemName: "cloud.hail.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal) ?? UIImage(), animation: "hailAnimation"),
+        WeatherAttributes(name: "Snow", image: UIImage(systemName: "cloud.snow.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal) ?? UIImage(), animation: "snowAnimation"),
+        WeatherAttributes(name: "Windy", image: UIImage(systemName: "wind")?.withTintColor(.white, renderingMode: .alwaysOriginal) ?? UIImage(), animation: "windyAnimation"),
+        WeatherAttributes(name: "Sunny", image: UIImage(systemName: "sun.max.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal) ?? UIImage(), animation: "sunnyAnimation"),
+        WeatherAttributes(name: "Sleet", image: UIImage(systemName: "cloud.sleet.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal) ?? UIImage(), animation: "sleetAnimation"),
+        WeatherAttributes(name: "Cloudy", image: UIImage(systemName: "cloud.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal) ?? UIImage(), animation: "cloudyAnimation"),
+        WeatherAttributes(name: "Tornado", image: UIImage(systemName: "tornado")?.withTintColor(.white, renderingMode: .alwaysOriginal) ?? UIImage(), animation: "tornadoAnimation"),
+        WeatherAttributes(name: "Drizzle", image: UIImage(systemName: "cloud.drizzle.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal) ?? UIImage(), animation: "drizzleAnimation"),
+        WeatherAttributes(name: "Blizzard", image: UIImage(systemName: "cloud.snow.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal) ?? UIImage(), animation: "blizzardAnimation"),
+        WeatherAttributes(name: "Sandstorm", image: UIImage(systemName: "sun.dust.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal) ?? UIImage(), animation: "sandstormAnimation"),
+        WeatherAttributes(name: "Thunderstorm", image: UIImage(systemName: "cloud.bolt.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal) ?? UIImage(), animation: "thunderstormAnimation"),
+        WeatherAttributes(name: "Partly Cloudy", image: UIImage(systemName: "cloud.sun.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal) ?? UIImage(), animation: "partlyCloudyAnimation")
     ]
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
+
         setupCollectionView()
+
+        NotificationCenter.default.addObserver(self, selector: #selector(handleImageTapNotification(_:)), name: .imageTapped, object: nil)
     }
 
     private func setupCollectionView() {
@@ -37,11 +39,11 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
 
         setupCollectionViewConstraints()
     }
-    
+
     private func setupCollectionViewLayout() -> UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical // Vertical scrolling
-
+        
         // Number of items per row
         let numberOfItemsPerRow: CGFloat = CGFloat(weatherTypes.count / 2)
         let padding: CGFloat = 5
@@ -53,8 +55,7 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         let numberOfRows: CGFloat = 2
         let totalVerticalPadding = padding * (numberOfRows + 1)
         let itemHeight = (collectionViewHeight - totalVerticalPadding) / numberOfRows
-
-
+        
         layout.itemSize = CGSize(width: itemWidth, height: itemHeight)
         layout.minimumInteritemSpacing = padding
         layout.minimumLineSpacing = padding
@@ -62,15 +63,14 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         return layout
     }
 
-
-    func setupCollectionViewConstraints() {
+    private func setupCollectionViewConstraints() {
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.25)
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
 
@@ -85,7 +85,19 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
             return UICollectionViewCell()
         }
         
-        cell.imageWeather.image = weatherTypes[indexPath.row].image
+        cell.imageWeather.image = weatherTypes[indexPath.item].image
         return cell
+    }
+
+    @objc private func handleImageTapNotification(_ notification: Notification) {
+        if let cell = notification.object as? CellFirstScreen,
+           let indexPath = collectionView.indexPath(for: cell) {
+            let animationName = weatherTypes[indexPath.item].animation
+            
+            showAnimation(for: animationName)
+        }
+    }
+
+    private func showAnimation(for animationName: String) {
     }
 }

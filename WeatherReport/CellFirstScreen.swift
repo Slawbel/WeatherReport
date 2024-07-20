@@ -1,11 +1,16 @@
 import UIKit
 
+extension NSNotification.Name {
+    static let imageTapped = NSNotification.Name("imageTapped")
+}
+
 class CellFirstScreen: UICollectionViewCell {
     var imageWeather = UIImageView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupImageWeatherSettings()
+        setupTapGestureRecognizer()
     }
 
     required init?(coder: NSCoder) {
@@ -28,5 +33,15 @@ class CellFirstScreen: UICollectionViewCell {
             imageWeather.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             imageWeather.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
+    }
+    
+    private func setupTapGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(cellAction))
+        contentView.isUserInteractionEnabled = true
+        contentView.addGestureRecognizer(tapGestureRecognizer)
+    }
+
+    @objc func cellAction() {
+        NotificationCenter.default.post(name: .imageTapped, object: self)
     }
 }
