@@ -3,6 +3,7 @@ import UIKit
 class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     private var collectionView: UICollectionView!
+    private let weatherView = WeatherView()
 
     let weatherTypes: [WeatherAttributes] = [
         WeatherAttributes(name: "Fog", image: UIImage(systemName: "cloud.fog.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal) ?? UIImage(), animation: "fogAnimation"),
@@ -25,7 +26,15 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         super.viewDidLoad()
         view.backgroundColor = .white
 
+        setupWeatherView()
         setupCollectionView()
+        displayRandomWeather()
+    }
+
+    private func setupWeatherView() {
+        weatherView.frame = view.bounds
+        weatherView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(weatherView)
     }
 
     private func setupCollectionView() {
@@ -38,37 +47,59 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         setupCollectionViewConstraints()
     }
 
+    private func displayRandomWeather() {
+        let randomIndex = Int.random(in: 0..<weatherTypes.count)
+        let randomWeather = weatherTypes[randomIndex]
+        weatherView.showAnimation(named: randomWeather.animation)
+    }
+
+    private func transitionToWeather(_ newWeather: WeatherAttributes) {
+        UIView.transition(with: weatherView, duration: 1.0, options: .transitionCrossDissolve, animations: {
+            self.weatherView.showAnimation(named: newWeather.animation)
+        }, completion: nil)
+    }
+
     private func setupCollectionViewLayout() -> UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical // Vertical scrolling
+        layout.scrollDirection = .horizontal // Horizontal scrolling
+
+        let padding: CGFloat = 10
+        let numberOfItemsPerRow: CGFloat = 4 // Number of items per row
         
-        // Number of items per row
-        let numberOfItemsPerRow: CGFloat = CGFloat(weatherTypes.count / 2)
-        let padding: CGFloat = 5
-        let totalPadding = padding * (numberOfItemsPerRow + 1)
         let collectionViewWidth = view.frame.width
+        let totalPadding = padding * (numberOfItemsPerRow + 1)
         let itemWidth = (collectionViewWidth - totalPadding) / numberOfItemsPerRow
         
-        let collectionViewHeight = view.frame.height * 0.25
-        let numberOfRows: CGFloat = 2
-        let totalVerticalPadding = padding * (numberOfRows + 1)
-        let itemHeight = (collectionViewHeight - totalVerticalPadding) / numberOfRows
+        let itemHeight = itemWidth // Ensure the itemHeight matches itemWidth (making them square)
         
         layout.itemSize = CGSize(width: itemWidth, height: itemHeight)
-        layout.minimumInteritemSpacing = padding
-        layout.minimumLineSpacing = padding
+        layout.minimumInteritemSpacing = padding // Spacing between items in a row
+        layout.minimumLineSpacing = padding / 2 // Reduced spacing between lines
         
         return layout
     }
 
     private func setupCollectionViewConstraints() {
+        // Calculate item size and number of rows
+        let padding: CGFloat = 10
+        let numberOfItemsPerRow: CGFloat = 4
+        let numberOfRows = ceil(Double(weatherTypes.count) / Double(Int(numberOfItemsPerRow)))
+        
+        let collectionViewWidth = view.frame.width
+        let totalPadding = padding * (numberOfItemsPerRow + 1)
+        let itemWidth = (collectionViewWidth - totalPadding) / numberOfItemsPerRow
+        let itemHeight = itemWidth
+        
+        // Calculate height for the collectionView to fit all cells
+        let collectionViewHeight = min(CGFloat(numberOfRows) * (itemHeight + padding) + padding, view.frame.height * 0.15) // Limit height to 15% of the screen height
+        
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 0.25)
+            collectionView.heightAnchor.constraint(equalToConstant: collectionViewHeight)
         ])
     }
 
@@ -82,21 +113,13 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellFirstScreen", for: indexPath) as? CellFirstScreen else {
             return UICollectionViewCell()
         }
-        
+
         cell.weatherButton.setImage(weatherTypes[indexPath.item].image, for: .normal)
         cell.addActionClosure = { [weak self] in
-            self?.handleWeatherButtonTap(at: indexPath)
+            guard let self = self else { return }
+            let selectedWeather = self.weatherTypes[indexPath.item]
+            self.transitionToWeather(selectedWeather)
         }
         return cell
-    }
-
-    private func handleWeatherButtonTap(at indexPath: IndexPath) {
-        let animationName = weatherTypes[indexPath.item].animation
-        showAnimation(for: animationName)
-    }
-
-    private func showAnimation(for animationName: String) {
-        // Implement animation logic here
-        print("Showing animation: \(animationName)")
     }
 }

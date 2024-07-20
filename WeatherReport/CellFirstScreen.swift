@@ -6,15 +6,14 @@ class CellFirstScreen: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        setupImageWeatherSettings()
+        setupWeatherButton()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupImageWeatherSettings() {
+    private func setupWeatherButton() {
         weatherButton.clipsToBounds = true
         weatherButton.contentMode = .scaleAspectFit
         weatherButton.backgroundColor = .black
@@ -24,10 +23,10 @@ class CellFirstScreen: UICollectionViewCell {
             self?.addActionClosure?()
         }, for: .touchUpInside)
         
-        setupCellConstraints()
+        setupConstraints()
     }
 
-    private func setupCellConstraints() {
+    private func setupConstraints() {
         contentView.addSubview(weatherButton)
         weatherButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
