@@ -27,20 +27,20 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
 
     private func initializeWeatherTypes(with tintColor: UIColor) -> [WeatherAttributes] {
         return [
-            WeatherAttributes(name: "Fog", image: UIImage(systemName: "cloud.fog.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
-            WeatherAttributes(name: "Rain", image: UIImage(systemName: "cloud.rain.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
-            WeatherAttributes(name: "Hail", image: UIImage(systemName: "cloud.hail.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
-            WeatherAttributes(name: "Snow", image: UIImage(systemName: "cloud.snow.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
-            WeatherAttributes(name: "Windy", image: UIImage(systemName: "wind")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
-            WeatherAttributes(name: "Sunny", image: UIImage(systemName: "sun.max.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
-            WeatherAttributes(name: "Sleet", image: UIImage(systemName: "cloud.sleet.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
-            WeatherAttributes(name: "Cloudy", image: UIImage(systemName: "cloud.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
-            WeatherAttributes(name: "Tornado", image: UIImage(systemName: "tornado")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
-            WeatherAttributes(name: "Drizzle", image: UIImage(systemName: "cloud.drizzle.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
-            WeatherAttributes(name: "Blizzard", image: UIImage(systemName: "cloud.snow.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
-            WeatherAttributes(name: "Sandstorm", image: UIImage(systemName: "sun.dust.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
-            WeatherAttributes(name: "Thunderstorm", image: UIImage(systemName: "cloud.bolt.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
-            WeatherAttributes(name: "Partly Cloudy", image: UIImage(systemName: "cloud.sun.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage())
+            WeatherAttributes(name: NSLocalizedString("fog", comment: ""), image: UIImage(systemName: "cloud.fog.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
+            WeatherAttributes(name: NSLocalizedString("rain", comment: ""), image: UIImage(systemName: "cloud.rain.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
+            WeatherAttributes(name: NSLocalizedString("hail", comment: ""), image: UIImage(systemName: "cloud.hail.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
+            WeatherAttributes(name: NSLocalizedString("snow", comment: ""), image: UIImage(systemName: "cloud.snow.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
+            WeatherAttributes(name: NSLocalizedString("windy", comment: ""), image: UIImage(systemName: "wind")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
+            WeatherAttributes(name: NSLocalizedString("sunny", comment: ""), image: UIImage(systemName: "sun.max.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
+            WeatherAttributes(name: NSLocalizedString("sleet", comment: ""), image: UIImage(systemName: "cloud.sleet.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
+            WeatherAttributes(name: NSLocalizedString("cloudy", comment: ""), image: UIImage(systemName: "cloud.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
+            WeatherAttributes(name: NSLocalizedString("tornado", comment: ""), image: UIImage(systemName: "tornado")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
+            WeatherAttributes(name: NSLocalizedString("drizzle", comment: ""), image: UIImage(systemName: "cloud.drizzle.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
+            WeatherAttributes(name: NSLocalizedString("blizzard", comment: ""), image: UIImage(systemName: "cloud.snow.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
+            WeatherAttributes(name: NSLocalizedString("sandstorm", comment: ""), image: UIImage(systemName: "sun.dust.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
+            WeatherAttributes(name: NSLocalizedString("thunderstorm", comment: ""), image: UIImage(systemName: "cloud.bolt.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
+            WeatherAttributes(name: NSLocalizedString("partlyCloudy", comment: ""), image: UIImage(systemName: "cloud.sun.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage())
         ]
     }
 
@@ -99,7 +99,7 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
     private func setupWeatherLabel() {
         weatherLabel = UILabel()
         weatherLabel.textAlignment = .center
-        weatherLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        weatherLabel.font = UIFont.systemFont(ofSize: 25, weight: .bold)
         weatherLabel.textColor = .black
         
         view.addSubview(weatherLabel)
@@ -141,10 +141,10 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         animatedImageView?.layer.removeAllAnimations()
         animatedImageView?.removeFromSuperview()
         
-        let imageView = UIImageView(image: image)
-        let initialSize: CGFloat = 100
+        let initialSize: CGFloat = 200 // Увеличенный начальный размер
         let increasedSize: CGFloat = initialSize * 2
         
+        let imageView = UIImageView(image: image)
         imageView.frame = CGRect(x: view.bounds.midX - initialSize / 2, y: view.bounds.midY - initialSize / 2, width: initialSize, height: initialSize)
         imageView.contentMode = .scaleAspectFit
         imageView.alpha = 0.8
@@ -161,7 +161,7 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
 
         let scaleAnimation = CABasicAnimation(keyPath: "transform.scale")
         scaleAnimation.fromValue = 1.0
-        scaleAnimation.toValue = 2.0
+        scaleAnimation.toValue = 2.0 // Увеличение масштаба
         scaleAnimation.duration = 0.8
         scaleAnimation.autoreverses = true
         scaleAnimation.repeatCount = .infinity
@@ -169,6 +169,7 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         imageView.layer.add(fadeOutAnimation, forKey: "fadeOut")
         imageView.layer.add(scaleAnimation, forKey: "scale")
     }
+
 
     private func transitionToNewImage(newImage: UIImage, withName name: String) {
         guard let imageView = animatedImageView else { return }

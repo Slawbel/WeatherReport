@@ -1,0 +1,14 @@
+"fog" = "Fog";
+"rain" = "Rain";
+"hail" = "Hail";
+"snow" = "Snow";
+"windy" = "Windy";
+"sunny" = "Sunny";
+"sleet" = "Sleet";
+"cloudy" = "Cloudy";
+"tornado" = "Tornado";
+"drizzle" = "Drizzle";
+"blizzard" = "Blizzard";
+"sandstorm" =  "Sandstorm";
+"thunderstorm" = "Thunderstorm";
+"partlyCloudy" = "Partly Cloudy";
