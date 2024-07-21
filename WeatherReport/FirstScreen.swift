@@ -15,6 +15,11 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         weatherTypes = initializeWeatherTypes(with: tintColor)
 
         setupCollectionView()
+        
+        // Выбор случайного изображения и запуск анимации
+        let randomIndex = Int.random(in: 0..<weatherTypes.count)
+        let randomWeather = weatherTypes[randomIndex]
+        animateImage(image: randomWeather.image)
     }
 
     private func initializeWeatherTypes(with tintColor: UIColor) -> [WeatherAttributes] {
