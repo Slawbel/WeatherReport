@@ -15,7 +15,7 @@ class CellFirstScreen: UICollectionViewCell {
 
     private func setupWeatherButton() {
         weatherButton.clipsToBounds = true
-        weatherButton.contentMode = .scaleAspectFit
+        weatherButton.contentMode = .scaleAspectFill
         weatherButton.backgroundColor = .black
         weatherButton.contentHorizontalAlignment = .center
         weatherButton.contentVerticalAlignment = .center
