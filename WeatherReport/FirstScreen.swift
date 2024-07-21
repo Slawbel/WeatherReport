@@ -6,7 +6,8 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
     private let tintColor = UIColor.lightGray
 
     private var weatherTypes: [WeatherAttributes] = []
-    private var animatedImageView: UIImageView? // Свойство для хранения ссылки на текущий animatedImageView
+    private var animatedImageView: UIImageView?
+    private var weatherLabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -15,11 +16,13 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         weatherTypes = initializeWeatherTypes(with: tintColor)
 
         setupCollectionView()
-        
+        setupWeatherLabel()
+
         // Выбор случайного изображения и запуск анимации
         let randomIndex = Int.random(in: 0..<weatherTypes.count)
         let randomWeather = weatherTypes[randomIndex]
         animateImage(image: randomWeather.image)
+        updateWeatherLabel(with: randomWeather.name)
     }
 
     private func initializeWeatherTypes(with tintColor: UIColor) -> [WeatherAttributes] {
@@ -53,20 +56,20 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
 
     private func setupCollectionViewLayout() -> UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal // Horizontal scrolling
-
+        layout.scrollDirection = .horizontal
+        
         let padding: CGFloat = 10
-        let numberOfItemsPerRow: CGFloat = 4 // Number of items per row
+        let numberOfItemsPerRow: CGFloat = 4
         
         let collectionViewWidth = view.frame.width
         let totalPadding = padding * (numberOfItemsPerRow + 1)
         let itemWidth = (collectionViewWidth - totalPadding) / numberOfItemsPerRow
         
-        let itemHeight = itemWidth // Ensure the itemHeight matches itemWidth (making them square)
+        let itemHeight = itemWidth
         
         layout.itemSize = CGSize(width: itemWidth, height: itemHeight)
-        layout.minimumInteritemSpacing = padding // Spacing between items in a row
-        layout.minimumLineSpacing = padding / 2 // Reduced spacing between lines
+        layout.minimumInteritemSpacing = padding
+        layout.minimumLineSpacing = padding / 2
         
         return layout
     }
@@ -81,7 +84,7 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         let itemWidth = (collectionViewWidth - totalPadding) / numberOfItemsPerRow
         let itemHeight = itemWidth
         
-        let collectionViewHeight = min(CGFloat(numberOfRows) * (itemHeight + padding) + padding, view.frame.height * 0.15) // Limit height to 15% of the screen height
+        let collectionViewHeight = min(CGFloat(numberOfRows) * (itemHeight + padding) + padding, view.frame.height * 0.15)
         
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -91,6 +94,26 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.heightAnchor.constraint(equalToConstant: collectionViewHeight)
         ])
+    }
+
+    private func setupWeatherLabel() {
+        weatherLabel = UILabel()
+        weatherLabel.textAlignment = .center
+        weatherLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        weatherLabel.textColor = .black
+        
+        view.addSubview(weatherLabel)
+        weatherLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            weatherLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            weatherLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            weatherLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            weatherLabel.heightAnchor.constraint(equalToConstant: 30)
+        ])
+    }
+
+    private func updateWeatherLabel(with text: String) {
+        weatherLabel.text = text
     }
 
     // MARK: - UICollectionViewDataSource
@@ -109,13 +132,12 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         cell.addActionClosure = { [weak self] in
             guard let self = self else { return }
             let selectedWeather = self.weatherTypes[indexPath.item]
-            self.animateImage(image: selectedWeather.image)
+            self.transitionToNewImage(newImage: selectedWeather.image, withName: selectedWeather.name)
         }
         return cell
     }
 
     private func animateImage(image: UIImage) {
-        // Удаление предыдущего UIImageView и его анимации
         animatedImageView?.layer.removeAllAnimations()
         animatedImageView?.removeFromSuperview()
         
@@ -128,9 +150,8 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         imageView.alpha = 0.8
         view.addSubview(imageView)
         
-        animatedImageView = imageView // Сохранение ссылки на текущий UIImageView
+        animatedImageView = imageView
 
-        // Эффект мерцания
         let fadeOutAnimation = CABasicAnimation(keyPath: "opacity")
         fadeOutAnimation.fromValue = 0.8
         fadeOutAnimation.toValue = 0.2
@@ -138,7 +159,6 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         fadeOutAnimation.autoreverses = true
         fadeOutAnimation.repeatCount = .infinity
 
-        // Анимация увеличения
         let scaleAnimation = CABasicAnimation(keyPath: "transform.scale")
         scaleAnimation.fromValue = 1.0
         scaleAnimation.toValue = 2.0
@@ -146,9 +166,31 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         scaleAnimation.autoreverses = true
         scaleAnimation.repeatCount = .infinity
 
-        // Добавляем обе анимации
         imageView.layer.add(fadeOutAnimation, forKey: "fadeOut")
         imageView.layer.add(scaleAnimation, forKey: "scale")
     }
 
+    private func transitionToNewImage(newImage: UIImage, withName name: String) {
+        guard let imageView = animatedImageView else { return }
+
+        UIView.animate(withDuration: 0.5, animations: {
+            imageView.alpha = 0.0
+        }) { _ in
+            imageView.image = newImage
+            
+            UIView.animate(withDuration: 0.5) {
+                imageView.alpha = 0.8
+            }
+            
+            self.updateWeatherLabel(with: name)
+        }
+        
+        UIView.animate(withDuration: 0.5, animations: {
+            imageView.transform = CGAffineTransform(rotationAngle: .pi).scaledBy(x: 1.5, y: 1.5)
+        }) { _ in
+            UIView.animate(withDuration: 0.5) {
+                imageView.transform = .identity
+            }
+        }
+    }
 }
