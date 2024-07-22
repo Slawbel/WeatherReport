@@ -18,13 +18,16 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         setupCollectionView()
         setupWeatherLabel()
 
-        // Выбор случайного изображения и запуск анимации
+        // Select a random image and start the animation
         let randomIndex = Int.random(in: 0..<weatherTypes.count)
         let randomWeather = weatherTypes[randomIndex]
         animateImage(image: randomWeather.image)
         updateWeatherLabel(with: randomWeather.name)
     }
-
+    
+    // Initializes the weather types with images and names
+    // Parameter tintColor: The color used to tint the weather icons
+    // Returns: An array of `WeatherAttributes` with different weather types
     private func initializeWeatherTypes(with tintColor: UIColor) -> [WeatherAttributes] {
         return [
             WeatherAttributes(name: NSLocalizedString("fog", comment: ""), image: UIImage(systemName: "cloud.fog.fill")?.withTintColor(tintColor, renderingMode: .alwaysOriginal) ?? UIImage()),
@@ -44,6 +47,7 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         ]
     }
 
+    // Sets up the collection view with its layout, data source, and delegate
     private func setupCollectionView() {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: setupCollectionViewLayout())
         collectionView.backgroundColor = .clear
@@ -54,6 +58,8 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         setupCollectionViewConstraints()
     }
 
+    // Configures the layout of the collection view
+    // Returns: `UICollectionViewFlowLayout` with horizontal scrolling and calculated item size
     private func setupCollectionViewLayout() -> UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -74,6 +80,7 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         return layout
     }
 
+    // Sets up the constraints for the collection view
     private func setupCollectionViewConstraints() {
         let padding: CGFloat = 10
         let numberOfItemsPerRow: CGFloat = 4
@@ -96,6 +103,7 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         ])
     }
 
+    // Sets up the weather label with initial properties and constraints
     private func setupWeatherLabel() {
         weatherLabel = UILabel()
         weatherLabel.textAlignment = .center
@@ -112,16 +120,26 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         ])
     }
 
+    // Updates the weather label with the given text
+    // Parameter text: The text to display in the weather label
     private func updateWeatherLabel(with text: String) {
         weatherLabel.text = text
     }
-
+    
     // MARK: - UICollectionViewDataSource
-
+    
+    // Returns the number of items in the collection view section
+    // Parameter collectionView: The collection view requesting this information
+    // Parameter section: The section of the collection view
+    // Returns: The number of items in the section
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return weatherTypes.count
     }
 
+    // Configures and returns a cell for the collection view
+    // Parameter collectionView: The collection view requesting this information
+    // Parameter indexPath: The index path of the cell to be returned
+    // Returns: A configured `UICollectionViewCell`
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellFirstScreen", for: indexPath) as? CellFirstScreen else {
             return UICollectionViewCell()
@@ -137,20 +155,21 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         return cell
     }
 
+    // Animates the image with fade and scale effects
+    // Parameter image: The image to be animated
     private func animateImage(image: UIImage) {
         animatedImageView?.layer.removeAllAnimations()
         animatedImageView?.removeFromSuperview()
         
-        let initialSize: CGFloat = 200 // Увеличенный начальный размер
-        let increasedSize: CGFloat = initialSize * 2
-        
+        // Initial size of the image
+        let initialSize: CGFloat = 200
         let imageView = UIImageView(image: image)
-        imageView.frame = CGRect(x: view.bounds.midX - initialSize / 2, y: view.bounds.midY - initialSize / 2, width: initialSize, height: initialSize)
         imageView.contentMode = .scaleAspectFit
         imageView.alpha = 0.8
         view.addSubview(imageView)
         
         animatedImageView = imageView
+        updateAnimatedImageViewFrame()
 
         let fadeOutAnimation = CABasicAnimation(keyPath: "opacity")
         fadeOutAnimation.fromValue = 0.8
@@ -170,7 +189,29 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
         imageView.layer.add(scaleAnimation, forKey: "scale")
     }
 
+    // Updates the frame of the animated image view based on the current screen size
+    private func updateAnimatedImageViewFrame() {
+        guard let imageView = animatedImageView else { return }
 
+        let isLandscape = view.bounds.width > view.bounds.height
+        let initialSize: CGFloat = isLandscape ? 100 : 200
+
+        // Calculate maximum size for the image to avoid overlap with collection view
+        let padding: CGFloat = 20
+        let verticalInset: CGFloat = 40
+        let maxSize = min(view.bounds.width - 3 * padding, view.bounds.height - 3 * verticalInset)
+        
+        let finalSize = min(initialSize, maxSize)
+        imageView.frame = CGRect(
+            x: view.bounds.midX - finalSize / 2,
+            y: view.bounds.midY - finalSize / 2,
+            width: finalSize,
+            height: finalSize
+        )
+    }
+    
+    // Transitions to a new image with animation and updates the weather label
+    // Parameters: newImage: The new image to transition to; name: The name of the weather to display in the label
     private func transitionToNewImage(newImage: UIImage, withName name: String) {
         guard let imageView = animatedImageView else { return }
 
@@ -178,6 +219,7 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
             imageView.alpha = 0.0
         }) { _ in
             imageView.image = newImage
+            self.updateAnimatedImageViewFrame()
             
             UIView.animate(withDuration: 0.5) {
                 imageView.alpha = 0.8
@@ -193,5 +235,11 @@ class FirstScreen: UIViewController, UICollectionViewDataSource, UICollectionVie
                 imageView.transform = .identity
             }
         }
+    }
+
+    // Updates the position and size of the animated image view when the screen orientation changes
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        updateAnimatedImageViewFrame()
     }
 }

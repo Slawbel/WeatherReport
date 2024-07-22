@@ -13,6 +13,7 @@ class CellFirstScreen: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // Sets up the weatherButton with the necessary properties and actions.
     private func setupWeatherButton() {
         weatherButton.clipsToBounds = true
         weatherButton.contentMode = .scaleAspectFit
@@ -26,6 +27,7 @@ class CellFirstScreen: UICollectionViewCell {
         setupConstraints()
     }
 
+    // Sets up the constraints for the weatherButton.
     private func setupConstraints() {
         contentView.addSubview(weatherButton)
         weatherButton.translatesAutoresizingMaskIntoConstraints = false
